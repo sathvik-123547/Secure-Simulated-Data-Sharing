@@ -1,4 +1,5 @@
 🔐 Secure Simulated Data Sharing with Fine-Grained Access Control and Integrity Auditing in a Terminal–Edge–Cloud Architecture
+
 🧠 Objective
 To implement a simulated, fully software-based version of the data-sharing protocol proposed in the referenced research paper. The system features:
 
@@ -53,6 +54,7 @@ Decrypts the data accordingly
 | Config Management    | JSON configs for users and access policies |
 
 ✨ Key Features
+
 ✅ Lightweight symmetric encryption at terminal
 
 ✅ CP-ABE-based fine-grained access at edge
@@ -66,6 +68,7 @@ Decrypts the data accordingly
 ✅ Fully modular and software-driven
 
 🎯 Outcomes
+
 ✅ A Python-based simulation showing secure data flow from terminal to cloud
 
 ✅ Attribute-controlled access and decryption using CP-ABE policies
