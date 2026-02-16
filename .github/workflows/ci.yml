@@ -35,10 +35,12 @@ jobs:
 
     - name: Run Unit Tests (Crypto Engine)
       run: |
+        export PYTHONPATH=$PYTHONPATH:.
         pytest tests/test_crypto.py -v
 
     - name: Run Integration Tests (Microservices)
       run: |
+        export PYTHONPATH=$PYTHONPATH:.
         # Start services in background
         nohup python3 -m uvicorn src.edge.api:app --host 127.0.0.1 --port 8000 &
         nohup python3 -m uvicorn src.cloud.api:app --host 127.0.0.1 --port 8001 &
@@ -48,4 +50,4 @@ jobs:
         sleep 5
         
         # Run Integration Test Script
-        python3 tests/test_api_flow.py
+        python3 -m tests.test_api_flow
