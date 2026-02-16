@@ -1,0 +1,11 @@
+Metadata-Version: 2.4
+Name: secure-data-sharing
+Version: 0.1.0
+Summary: A privacy-preserving, verifiable IoT data exchange platform.
+Author-email: SecureData Team <dev@securedata.io>
+Requires-Python: >=3.10
+Requires-Dist: fastapi>=0.100.0
+Requires-Dist: uvicorn>=0.20.0
+Requires-Dist: cryptography>=41.0.0
+Requires-Dist: pydantic>=2.0.0
+Requires-Dist: requests>=2.31.0

@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  edge-service:
+    build: .
+    command: uvicorn src.edge.api:app --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+    networks:
+      - secure-net
+
+  cloud-service:
+    build: .
+    command: uvicorn src.cloud.api:app --host 0.0.0.0 --port 8001
+    ports:
+      - "8001:8001"
+    networks:
+      - secure-net
+
+  tpa-service:
+    build: .
+    command: uvicorn src.tpa.api:app --host 0.0.0.0 --port 8002
+    ports:
+      - "8002:8002"
+    networks:
+      - secure-net
+    environment:
+      - CLOUD_URL=http://cloud-service:8001
+
+  # Terminal is a script, runs once or in loop.
+  # For demo, we can just run it interactively or as a service that pings edge.
+  # Let's make it sleep loop.
+  terminal-device:
+    build: .
+    command: python3 -c "import time; print('Terminal Active'); time.sleep(3600)"
+    networks:
+      - secure-net
+    depends_on:
+      - edge-service
+
+networks:
+  secure-net:
+    driver: bridge

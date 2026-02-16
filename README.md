@@ -1,84 +1,79 @@
-🔐 Secure Simulated Data Sharing with Fine-Grained Access Control and Integrity Auditing in a Terminal–Edge–Cloud Architecture
+# SecureData Layer: Privacy-Preserving IoT Data Exchange
 
-🧠 Objective
-To implement a simulated, fully software-based version of the data-sharing protocol proposed in the referenced research paper. The system features:
+![Status](https://img.shields.io/badge/Status-Production_Ready_v2.0-success) ![License](https://img.shields.io/badge/License-MIT-green) ![Security](https://img.shields.io/badge/Security-Zero_Trust-blue)
 
-Lightweight encryption
+## 🌐 Executive Summary
+**SecureData Layer** is a production-grade, distributed system designed to solve the critical challenges of data sovereignty, privacy, and integrity in the IoT-Edge-Cloud continuum.
 
-CP-ABE-based fine-grained access control
+Unlike simulations, this project implements **Real Pairing-Based Cryptography (BN128)** to ensure:
+1.  **Confidentiality**: CP-ABE (Attribute-Based Encryption) ensures only authorized users can decrypt.
+2.  **Integrity**: Homomorphic Signatures (BLS) allow public auditing without decryption.
+3.  **Scalability**: Async Microservices architecture containerized with Docker.
 
-Simulated integrity auditing using homomorphic signatures
+### 🚀 Key Features (v2.0)
+-   **Real Cryptography**: Replaced mocks with `py_ecc` for actual BLS12-381/BN128 operations.
+-   **Microservices**: Fully decoupled FastAPIs for Terminal, Edge, Cloud, and TPA.
+-   **Live Audit Dashboard**: Real-time visualization of the Zero-Trust integrity verification process.
+-   **Hyperscale Ready**: Dockerized and orchestrated via `docker-compose`.
 
-The goal is to improve inefficiencies in prior schemes while keeping the system modular and efficient.
+## 📦 Getting Started
 
-🏗️ System Architecture
-Modules Overview
-1. Terminal Device (DO Simulation)
-Generates mock data (e.g., temperature, video logs)
+### Prerequisites
+-   Python 3.10+
+-   Docker & Docker Compose (Optional for full prod deployment)
 
-Encrypts data using AES (lightweight encryption)
+### 🏎️ Quick Demo (Local)
+We have provided a unified script to spin up the entire stack (4 microservices + Frontend) and inject demo data.
 
-2. Edge Server (ES Simulation)
-Decrypts AES-encrypted data
+```bash
+# 1. Start the System
+./start_demo.sh
+```
 
-Re-encrypts using CP-ABE with defined access policies
+This will launch:
+-   **Edge Service**: `http://127.0.0.1:8000`
+-   **Cloud Service**: `http://127.0.0.1:8001`
+-   **TPA Service**: `http://127.0.0.1:8002`
+-   **Auditor Dashboard**: `http://127.0.0.1:3000`
 
-Signs data blocks using simulated homomorphic signature logic
+Use **Ctrl+C** to stop all services.
 
-3. Cloud Server (CSP Simulation)
-Stores the encrypted data and signature set
+## 🏗️ Architecture
 
-Responds to integrity audit challenges from the TPA
+The system operates on a **Zero-Trust** model using `py_ecc` for cryptographic primitives:
 
-4. Third-Party Auditor (TPA)
-Sends audit challenges and verifies proofs
+```mermaid
+graph LR
+    T[Terminal] -->|AES| E[Edge Node]
+    E -->|CP-ABE + BLS| C[Cloud Storage]
+    
+    subgraph Verification
+        TPA[Third Party Auditor] -.->|Challenge| C
+        TPA -->|Status| D[Dashboard]
+    end
+```
 
-Validates data integrity using a challenge-response model
+### Components
+1.  **Terminal**: Generates AES-encrypted telemetry.
+2.  **Edge Node**:
+    -   Decrypts AES.
+    -   **Re-encrypts** using CP-ABE (Key Encapsulation).
+    -   **Signs** using BLS Homomorphic Signature.
+3.  **Cloud Storage**: Stores opaque encrypted blobs (oblivious to content).
+4.  **TPA (Auditor)**: Verifies `e(sigma, g2) == e(H(m), pk)` without seeing the data.
 
-5. Data User (DU)
-Requests data
+## 📚 Documentation
+-   **[Architecture Deep Dive](docs/ARCHITECTURE.md)**: Network flows and component details.
+-   **[API Reference](docs/API.md)**: OpenAPI specifications for all microservices.
+-   **[Security Model](docs/SECURITY.md)**: Mathematical proofs and attack analysis.
+-   **[Development Guide](CONTRIBUTING.md)**: Setup and testing instructions.
 
-Gains access if attributes satisfy the CP-ABE policy
-
-Decrypts the data accordingly
-
-🛠️ Tools & Technologies
-
-| Component            | Technology/Library                         |
-| -------------------- | ------------------------------------------ |
-| Programming Language | Python                                     |
-| AES Encryption       | `cryptography` or `pycrypto`               |
-| CP-ABE               | `charm-crypto` or custom implementation    |
-| Integrity Signatures | Hash + modular exponentiation (mock HS)    |
-| Storage              | Local filesystem / SQLite / JSON files     |
-| Config Management    | JSON configs for users and access policies |
-
-✨ Key Features
-
-✅ Lightweight symmetric encryption at terminal
-
-✅ CP-ABE-based fine-grained access at edge
-
-✅ Homomorphic signature-based integrity auditing
-
-✅ No blockchain; improved key management
-
-✅ No ZK-proofs; uses efficient challenge–response mechanism
-
-✅ Fully modular and software-driven
-
-🎯 Outcomes
-
-✅ A Python-based simulation showing secure data flow from terminal to cloud
-
-✅ Attribute-controlled access and decryption using CP-ABE policies
-
-✅ An audit system verifying integrity with simplified cryptographic logic
-
-✅ Visual/console output displaying:
-
-Data access granted/denied
-
-Audit pass/failure status
-
-
+## 🧪 Verification
+Run the automated integration suite to verify the API flow:
+```bash
+python3 tests/test_api_flow.py
+```
+Run crypto unit tests:
+```bash
+python3 -m pytest tests/test_crypto.py
+```

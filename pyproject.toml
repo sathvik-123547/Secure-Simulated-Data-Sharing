@@ -1,0 +1,23 @@
+[project]
+name = "secure-data-sharing"
+version = "0.1.0"
+description = "A privacy-preserving, verifiable IoT data exchange platform."
+authors = [
+    {name = "SecureData Team", email = "dev@securedata.io"},
+]
+dependencies = [
+    "fastapi>=0.100.0",
+    "uvicorn>=0.20.0",
+    "cryptography>=41.0.0",
+    "pydantic>=2.0.0",
+    "requests>=2.31.0",
+]
+requires-python = ">=3.10"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
